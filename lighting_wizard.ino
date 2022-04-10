@@ -1,6 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <IRremote.h>
 
+// define button codes for IR remote signal
 #define Button1 0xFFA25D
 #define Button2 0xFF629D
 #define Button3 0xFFE21D
@@ -15,6 +16,8 @@ byte colormap[6][3];
 bool OnOff;
 float power;
 
+// variables to influence color spectrum of the rbgw pixels, understand bias to mean "learns toward"
+// in terms of color output
 bool stop_waiting = false;
 bool white_bias = false;
 bool rainbow_bias = true;
@@ -22,19 +25,24 @@ bool red_bias = false;
 bool blue_bias = false;
 bool green_bias = false;
 
+//setup neopixel strip
 int NUM_LEDS = 90;
 int LED_PIN = 3;
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_RGBW);
 
+//setup ir detector
 const int RECV_PIN = 11;
 IRrecv irrecv(RECV_PIN);
 decode_results results;
 
+//variables that influence the frequency of lighting strike function calls
 const byte HIGH_STRIKE_LIKELIHOOD = 5;
 const byte LOW_STRIKE_LIKELIHOOD = 10;
 int currentDataPoint = 0;
 int chance = LOW_STRIKE_LIKELIHOOD;
 
+//lightweight class to map a pixel's spatial position relative to its neighbors
+// need this for realistic lightning bolts
 class PixelInfo {
   public :
   byte * top;
@@ -42,6 +50,7 @@ class PixelInfo {
   PixelInfo () {}
 };
 
+//initialize position of pixels, this requires physical inspection of the constructed hat
 byte Starmap[180] = {0, 30, 0, 31, 0, 31, 0, 32, 0, 33, 0, 33, 0, 34, 0, 35, 0, 36, 0, 36, 0, 37, 0, 38, 0, 38, 0, 39, 0, 40, 0, 40, 0, 41, 0, 42, 0, 42, 0, 43, 0, 44, 0, 44, 0, 45, 0, 46, 0, 47, 0, 47, 0, 48, 0, 49, 0, 49, 0, 50, 0, 50,2, 51, 3, 52, 5, 52, 6, 53, 8, 54, 9, 55, 11, 56, 13, 56, 14, 57, 16, 58, 17, 59, 19, 59,21, 60, 22, 61, 24, 62, 25, 63, 27, 63, 28, 64, 30, 65, 30, 65, 31, 66, 33, 67, 34, 68, 36, 69, 37, 70, 39, 71, 40, 72, 41, 74, 43, 75, 44, 76, 46, 77, 47, 78, 49, 79, 50, 80, 50, 80, 51, 81, 52, 81, 53, 82, 54, 83, 55, 84, 56, 84, 58, 85, 59, 86, 60, 86, 61, 87, 62, 88, 63, 89, 64, 89, 65, 90, 65, 91, 67, 92, 68, 93, 70, 94, 72, 95, 73, 96, 75, 97, 77, 98, 78,99, 80, 100};
 
 PixelInfo Stars[90] = {};
@@ -80,11 +89,13 @@ void setup() {
   functionPtrs[0] = simple_moving_average;
   functionPtrs[1] = random_moving_average;
 
-  electric_ptrs[0] = bolt;
-  electric_ptrs[1] = thunderburst;
-  electric_ptrs[2] = rolling;
-  electric_ptrs[3] = storm;
-  electric_ptrs[4] = vanilla;
+  
+  //functions that call different lightning effects
+  electric_ptrs[0] = bolt;  //random path traveling lightning bolt  
+  electric_ptrs[1] = thunderburst;  //bright flash over large sections of cloud
+  electric_ptrs[2] = rolling;  // quick flash effect over whole hat
+  electric_ptrs[3] = storm;  //multiple bolts
+  electric_ptrs[4] = vanilla; //testing function that illuminates a target led constantly
 
  
   colormap[0][0]=1;
@@ -154,7 +165,6 @@ void turnAllPixelsOff() {
   strip.show();
 }
 
-// MARK
 float colorValue() {
   float brightness = callFunction(random(2));
   //Serial.println(brightness);
@@ -246,7 +256,6 @@ void thunderburst(){
     if(rs2+rl2 < NUM_LEDS){
       for(byte i=0;i< rl2; i++){
         lightningStrike(i+rs1);
-        //strip.setPixelColor(i+rs1, colorValue(), colorValue(), colorValue(), .25 * colorValue());
       }
     }
     //Serial.println("bursting!");
@@ -281,7 +290,6 @@ void rolling(){
 void bolt () {
   //Serial.println("lightning bolt! lightning bolt!");
   int lrod;
-  byte chain_len = random(10,25);
   for (int chain_len=0; chain_len < 10; chain_len++) {
  
     if (chain_len==0) { 
