@@ -47,7 +47,7 @@ class PixelInfo {
 };
 
 //initialize position of pixels, this requires physical inspection of the constructed hat
-//note that the strip sprirals from the outer bottom edge up to the top of the hat
+//note that the strip spirals from the outer bottom edge up to the top of the hat
 byte Starmap[180] = {0, 30, 0, 31, 0, 31, 0, 32, 0, 33, 0, 33, 0, 34, 0, 35, 0, 36, 0, 36,
                      0, 37, 0, 38, 0, 38, 0, 39, 0, 40, 0, 40, 0, 41, 0, 42, 0, 42, 0, 43,
                      0, 44, 0, 44, 0, 45, 0, 46, 0, 47, 0, 47, 0, 48, 0, 49, 0, 49, 0, 50,
