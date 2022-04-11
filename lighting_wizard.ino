@@ -20,10 +20,6 @@ float power;
 // in terms of color output
 bool stop_waiting = false;
 bool white_bias = false;
-bool rainbow_bias = true;
-bool red_bias = false;
-bool blue_bias = false;
-bool green_bias = false;
 
 //setup neopixel strip
 int NUM_LEDS = 90;
