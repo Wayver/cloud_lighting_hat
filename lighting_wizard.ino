@@ -176,28 +176,16 @@ float colorValue() {
 }
 
 void lightningStrike(int pixel) {
-  //byte brightness = colorValue();
-  static byte ccount = 0;
-  if(ccount > 6) {
-    ccount = 0;
-  }
-  static byte color_switch = 0;
 
   if(white_bias) {
     //Serial.println("WHITE FLASH");
     strip.setPixelColor(pixel, strip.Color(colorValue(), colorValue(), colorValue(), 0));
   } else {
-    //Serial.println("old blue white");
     byte brightness = colorValue();
     //strip.setPixelColor(pixel, strip.Color(brightness, brightness, brightness, 0));
     strip.setPixelColor(pixel, strip.Color(colormap[ccount][0]*brightness, colormap[ccount][1]*brightness, colormap[ccount][2]*brightness, 0));
-    color_switch += 1;
   }
 
-  if(color_switch > 15) {
-    ccount += 1;
-    color_switch = 0;
-  }
   currentDataPoint++;
   currentDataPoint = currentDataPoint%NUM_Y_VALUES;
 }
