@@ -101,7 +101,7 @@ void setup() {
   electric_ptrs[1] = thunderburst;  //bright flash over large sections of cloud
   electric_ptrs[2] = rolling;  // quick flash effect over whole hat
   electric_ptrs[3] = storm;  //multiple bolts
-  electric_ptrs[4] = vanilla; //testing function that illuminates a target led constantly
+  //electric_ptrs[4] = vanilla; //testing function that illuminates a target led constantly
 
  
   colormap[0][0]=1;
@@ -404,15 +404,4 @@ void storm() {
   bolt();
   bolt();
   bolt();
-}
-
-void vanilla() {
-  //Serial.println("called vanilla");
-  for (int i = 0; i < 10; i++) {
-      // Use this line to keep the lightning focused in one LED.
-      // lightningStrike(led):
-      // Use this line if you want the lightning to spread out among multiple LEDs.
-      lightningStrike(random(NUM_LEDS));
-      delay_show(100);
-    }
 }
