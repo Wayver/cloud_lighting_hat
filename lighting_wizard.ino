@@ -94,15 +94,13 @@ void setup() {
   // initializes the array of function pointers.
   functionPtrs[0] = simple_moving_average;
   functionPtrs[1] = random_moving_average;
-
-  
+ 
   //functions that call different lightning effects
   electric_ptrs[0] = bolt;  //random path traveling lightning bolt  
   electric_ptrs[1] = thunderburst;  //bright flash over large sections of cloud
   electric_ptrs[2] = rolling;  // quick flash effect over whole hat
   electric_ptrs[3] = storm;  //multiple bolts
   //electric_ptrs[4] = vanilla; //testing function that illuminates a target led constantly
-
  
   colormap[0][0]=1;
   colormap[0][1]=0;
@@ -133,7 +131,6 @@ void setup() {
 }
 
 void loop() {
-
   // keep luck range from infinitely increasing
   if(luck_range > 5) {
     luck_range = 1;
@@ -147,10 +144,7 @@ void loop() {
   static bool strike = false;
   if(OnOff) {
     if(random(chance) <= luck_range) {   //activate 
-  //  if(random(chance) == 3) {   //activate 
       byte funky = random(0,5);
-      //Serial.print("funky function for this loop is: ");
-      //Serial.println(funky);
       call_lightning(funky);
       chance = HIGH_STRIKE_LIKELIHOOD;
     } // end flag loop 
@@ -173,7 +167,6 @@ void turnAllPixelsOff() {
 
 float colorValue() {
   float brightness = callFunction(random(2));
-  //Serial.println(brightness);
   float scaled_brightness = abs(brightness*150);
   if(scaled_brightness > 255) {
     scaled_brightness = 255;  
@@ -188,7 +181,6 @@ void lightningStrike(int pixel) {
     strip.setPixelColor(pixel, strip.Color(colorValue(), colorValue(), colorValue(), 0));
   } else {
     byte brightness = colorValue();
-    //strip.setPixelColor(pixel, strip.Color(brightness, brightness, brightness, 0));
     strip.setPixelColor(pixel, strip.Color(colormap[ccount][0]*brightness, colormap[ccount][1]*brightness, colormap[ccount][2]*brightness, 0));
   }
 
@@ -215,7 +207,6 @@ float simple_moving_average() {
   return simple_moving_average_current;
 }
 
-
 // Same as simple moving average, but with randomly-generated data points.
 float random_moving_average() {
   float firstValue = random(1, 10);
@@ -224,8 +215,6 @@ float random_moving_average() {
                                   firstValue/NUM_Y_VALUES -
                                   secondValue/NUM_Y_VALUES;
   random_moving_average_previous = random_moving_average_current;
-  
-  //Serial.print(random_moving_average_current);
   return random_moving_average_current;
 }
 
@@ -310,8 +299,6 @@ void bolt () {
 
 
 void controller(){
-  //Serial.println("we are in the controller");
-
   if (irrecv.decode(&results)) {  
      if( results.value == Button_mash) {
      // Serial.println(results.value, HEX);
