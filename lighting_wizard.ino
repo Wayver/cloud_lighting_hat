@@ -274,24 +274,29 @@ void bolt () {
   //Serial.println("lightning bolt! lightning bolt!");
   int lrod;
   for (int chain_len=0; chain_len < 10; chain_len++) {
- 
     if (chain_len==0) { 
       lrod = random(NUM_LEDS);
       lightningStrike(lrod);
       delay_show(50);
-    } else {
-     
-       int nselect = random(3);    
-
-       if(nselect==0) { lrod = *(Stars[lrod].top); }
-       if(nselect==1) { lrod = *(Stars[lrod].bot); }
-       if(nselect==2) { lrod += 1; }
-       if(nselect==3) { lrod -= 1; }      
-       if(lrod >= 90 || lrod <= 0 ) {
-         break;
-       } else {
-         lightningStrike(lrod);
-         delay_show(50);
+    } else { 
+      int nselect = random(3);    
+        if(nselect==0) {
+          lrod = *(Stars[lrod].top);
+        }
+        if(nselect==1) {
+          lrod = *(Stars[lrod].bot);
+        }
+        if(nselect==2) {
+          lrod += 1; 
+        }
+        if(nselect==3) {
+          lrod -= 1;
+        }      
+        if(lrod >= 90 || lrod <= 0 ) {
+          break;
+        } else {
+          lightningStrike(lrod);
+          delay_show(50);
        }
     }
   }
